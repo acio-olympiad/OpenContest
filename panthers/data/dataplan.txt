@@ -1,0 +1,4 @@
+Data plan:
+- Random
+- Adversarial solution 1 (Heuristic)
+- Adversarial solution 2 (Spikey)
