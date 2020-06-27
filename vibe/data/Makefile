@@ -1,4 +1,4 @@
-.PHONY: all clean input output
+.PHONY: all clean input output check
 
 all: input output check zip
 
@@ -10,6 +10,7 @@ output: input
 	bash ./make-output.sh
 
 check: input
+	bash ./ran-validator.sh
 
 zip: input output check
 	zip data.zip *.in *.out
