@@ -8,7 +8,7 @@ To generate a random case for a subtask use:
 python vibe-gen.py <subtask>
 
 To specify additional parameters, use:
-python vibe-gen.py <subtask> <N> <M> <treetype> <idtype>
+python vibe-gen.py <subtask> <N> <M> <treetype>
 
 case will be written to stdout
 
@@ -16,7 +16,6 @@ subtask - the subtask of case (1-6)
 N - number of cities (2 - subtask limit)
 M - number of reporters (1 - subtask limit)
 treetype - the type of tree generated as per tree_gen.py (0-9)
-idtype - the method used to assign id's to the tree as per tree_gen.py (0-2)
 """
 
 if len(sys.argv) < 2:
@@ -25,7 +24,7 @@ if len(sys.argv) < 2:
 if len(sys.argv) < 6:
     subtask = int(sys.argv[1])
 else:
-    subtask, N, M, tree_type, id_type = map(int, sys.argv[1:])
+    subtask, N, M, tree_type = map(int, sys.argv[1:])
 
 defaults = (int(1e5), int(1e6), int(1e6), list(range(len(tg.TREE_TYPES))))
 
@@ -47,7 +46,8 @@ if len(sys.argv) < 6:
     N = random.randint(2, MAX_N)
     M = random.randint(1, MAX_M)
     tree_type = random.choice(allowed_types)
-    id_type = random.randrange(0,len(tg.ID_TYPES))
+
+id_type = 2
 
 # checks if valid subtask
 if N < 2 or N > MAX_N:
@@ -58,6 +58,9 @@ if M < 1 or M > MAX_M:
 
 if  tree_type not in allowed_types:
     raise Exception("Invalid tree type for subtask.")
+
+if id_type != 2:
+    raise Exception("id type must == 2 to maintain a_i < i constraint.")
 
 tree = tg.TREE_TYPES[tree_type](N)
 
