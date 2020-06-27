@@ -35,7 +35,7 @@ void work(int l, int r) { //for a given side find best structure
     St.clear();
 }
 
-void Set(int l, int r, bool b) { //set vals and upd H
+void Set(int c, int l, int r, bool b) { //set vals and upd H
     int dir = b ? -1 : 1; //b = 1 means left to right
     for (int j=l; j <= r; j++) {
         LoVal[j] = HiVal[j] = 0;
@@ -51,7 +51,6 @@ void Set(int l, int r, bool b) { //set vals and upd H
 }
 
 int main() {
-    freopen("landin.txt","r",stdin);
     scanf("%d %d",&N,&S);
     for (int i=1; i<=S; i++) {
         int r,c;
@@ -68,7 +67,7 @@ int main() {
         int prev = 0;
         for (int i=0; i<CS2[c].size(); i++) {
             if (i+1 == CS2[c].size() || CS2[c][i].fi + 1 != CS2[c][i+1].fi) {
-                Set(CS2[c][prev].fi, CS2[c][i].fi, 1);
+                Set(c, CS2[c][prev].fi, CS2[c][i].fi, 1);
                 work(CS2[c][prev].fi, CS2[c][i].fi);
                 int bestval = 0;
                 for (int j=CS2[c][prev].fi; j <= CS2[c][i].fi; j++) {
@@ -91,7 +90,7 @@ int main() {
         int prev = 0;
         for (int i=0; i<CS2[c].size(); i++) {
             if (i+1 == CS2[c].size() || CS2[c][i].fi + 1 != CS2[c][i+1].fi) {
-                Set(CS2[c][prev].fi, CS2[c][i].fi, 0);
+                Set(c, CS2[c][prev].fi, CS2[c][i].fi, 0);
                 work(CS2[c][prev].fi, CS2[c][i].fi);
                 int bestval = 0;
                 for (int j=CS2[c][prev].fi; j <= CS2[c][i].fi; j++) {
