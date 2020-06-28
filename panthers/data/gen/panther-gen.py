@@ -12,13 +12,13 @@ python panther-gen.py <subtask> <N> <treetype> <idtype>
 
 case will be written to stdout
 
-subtask - the subtask of case (1-5)
+subtask - the subtask of case (1-4)
 N - number of cities (1 - subtask limit)
-treetype - the type of tree generated as per treegen.py (0-9)
+treetype - the type of tree generated as per treegen.py (0-12)
 idtype - the ordering of ids assigned to the tree as per treegen.py (0-2)
 """
 
-SUBTASKS = 5
+SUBTASKS = 4
 ARGS = 4
 
 if len(sys.argv) < 2:
@@ -32,14 +32,13 @@ else:
 if subtask < 1 or subtask > SUBTASKS:
     raise Exception("Invalid subtask number.")
 
-defaults = (1000, list(range(len(tg.TREE_TYPES))), list(range(len(tg.ID_TYPES))))
+defaults = (1000, [0,2,5,6,10,11], list(range(len(tg.ID_TYPES))))
 
 MAX_N, allowed_trees, allowed_ids = (
     (), # 1-based subtasks,
     (200, defaults[1], defaults[2]),
-    (1000, [0], defaults[2]),
-    (1000, defaults[0], [2]),
-    (600, defaults[1], defaults[2]),
+    (defaults[0], [0], defaults[2]),
+    (defaults[0], defaults[1], [2]),
     defaults
 )[subtask]
 
@@ -53,10 +52,10 @@ if len(sys.argv) < ARGS + 1:
 if N < 1 or N > MAX_N:
     raise Exception("N out of bounds for subtask.")
 
-if  tree_type not in allowed_trees:
+if tree_type not in allowed_trees:
     raise Exception("Invalid tree type for subtask.")
 
-if  id_type not in allowed_ids:
+if id_type not in allowed_ids:
     raise Exception("Invalid id type for subtask.")
 
 tree = tg.TREE_TYPES[tree_type](N)
