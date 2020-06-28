@@ -15,18 +15,21 @@ case will be written to stdout
 subtask - the subtask of case (1-6)
 N - number of cities (2 - subtask limit)
 M - number of reporters (1 - subtask limit)
-treetype - the type of tree generated as per treegen.py (0-9)
+treetype - the type of tree generated as per treegen.py (0-12)
 """
+
+SUBTASKS = 6
+ARGS = 4
 
 if len(sys.argv) < 2:
     print(usage)
 
-if len(sys.argv) < 5:
+if len(sys.argv) < ARGS + 1:
     subtask = int(sys.argv[1])
 else:
     subtask, N, M, tree_type = map(int, sys.argv[1:])
 
-if subtask < 1 or subtask > 6:
+if subtask < 1 or subtask > SUBTASKS:
     raise Exception("Invalid subtask number.")
 
 defaults = (int(1e5), int(1e6), int(1e6), list(range(len(tg.TREE_TYPES))))
@@ -45,7 +48,7 @@ MAX_N, MAX_M, MAX_di, allowed_types = (
 
 MAX_vi = int(1e6)
 
-if len(sys.argv) < 6:
+if len(sys.argv) < ARGS + 1:
     N = random.randint(2, MAX_N)
     M = random.randint(1, MAX_M)
     tree_type = random.choice(allowed_types)

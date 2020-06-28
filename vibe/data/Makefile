@@ -4,6 +4,7 @@ all: input output check zip
 
 input:
 	# Put any data generation commands here
+	python3 gen/bootstrap.py
 	cp handmade/* .
 
 output: input
