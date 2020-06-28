@@ -3,15 +3,13 @@ import os
 ALLOWED_TREES = [0,2,5,6,10,11]
 
 typename = {
-    0 : "line",
-    2 : "random-binary-tree",
-    5 : "tri-tree",
-    6: "balanced-binary-tree",
+    0: "line",
+    2: "random",
+    5: "tri",
+    6: "balanced",
     10: "half-fishbone",
     11: "spikey",
 }
-
-# line, random_binary_tree, tri-tree, balanced_binary_tree, half_fishbone, spikey 
 
 def print_system(command):
     print("Generating", command.split()[-1])
@@ -29,6 +27,8 @@ def sub1():
     gen_specific("size2", 1, 2, 0, 0)
     gen_specific("size10", 1, 10, 2, 0)
     gen_specific("size199", 1, 199, 2, 0)
+    gen_specific("size127-balanced", 1, 127, 6, 0)
+    gen_specific("size128-balanced", 1, 128, 6, 0)
 
     gen_specific("random-ids", 1, 200, 2, 0)
     gen_specific("ascending-ids", 1, 200, 2, 1)
@@ -63,7 +63,8 @@ def sub3():
     gen_specific("small", 3, 10, 2, 2)
     gen_specific("medium", 3, 100, 2, 2)
     gen_specific("size512", 3, 512, 2, 2)
-    gen_specific("size512-balanced-binary-tree", 3, 512, 6, 2)
+    gen_specific("size511-balanced", 3, 511, 6, 2)
+    gen_specific("size512-balanced", 3, 512, 6, 2)
     gen_specific("size999", 3, 999, 2, 2)
 
     for tt in ALLOWED_TREES:
@@ -80,7 +81,8 @@ def sub4():
     gen_specific("size10", 4, 10, 2, 0)
     gen_specific("size100", 4, 100, 2, 0)
     gen_specific("size512", 4, 512, 2, 0)
-    gen_specific("size512-balanced-binary-tree", 4, 512, 6, 0)
+    gen_specific("size511-balanced", 4, 511, 6, 0)
+    gen_specific("size512-balanced", 4, 512, 6, 0)
     gen_specific("size999", 4, 999, 2, 0)
 
     gen_specific("random-ids", 4, 1000, 2, 0)
@@ -92,7 +94,6 @@ def sub4():
 
     for i in range(5):
         gen_random("random%d" % i, 4)
-
 
 sub1()
 sub2()
