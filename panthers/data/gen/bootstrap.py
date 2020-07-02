@@ -15,11 +15,20 @@ def print_system(command):
     print("Generating", command.split()[-1])
     os.system(command)
 
+    # replace pyth-on, ge-n/python3
+
 def gen_specific(of, sb, N, tt, it):
-    print_system("gen/python3 panther-gen.py %d %d %d %d > %s-sub%d.in" % (sb, N, tt, it, of, sb))
+    print_system("python panther-gen.py 0 %d %d %d %d > %s-sub%d.in" % (sb, N, tt, it, of, sb))
 
 def gen_random(of, sb):
-    print_system("gen/python3 panther-gen.py %d > %s-sub%d.in" % (sb,of,sb))
+    print_system("python panther-gen.py 0 %d > %s-sub%d.in" % (sb,of,sb))
+
+def gen_adv_spikey(of, sb, N, spikes):
+    print_system("python panther-gen.py 1 %d %d %d > %s-sub%d.in" % (sb, N, spikes, of, sb))
+
+def gen_adv_input(of, sb, N, tt, it):
+    print_system("python panther-gen.py 2 %d %d %d %d > %s-sub%d.in" % (sb, N, tt, it, of, sb))
+
 
 def sub1():
     print("Subtask 1...")
@@ -40,11 +49,20 @@ def sub1():
     for i in range(5):
         gen_random("random%d" % i, 1)
 
+    gen_adv_spikey("adversarial-line", 1, 200, 0)
+    gen_adv_spikey("adversarial-spikey-1", 1, 200, 1)
+    gen_adv_spikey("adversarial-spikey-20", 1, 200, 20)
+    gen_adv_spikey("adversarial-spikey-100", 1, 200, 100)
+
+    gen_adv_input("adversarial-spikeyv2", 1, 200, 11, 2)
+    gen_adv_input("adversarial-balanced", 1, 200, 6, 2)
+
 def sub2():
     print("\nSubtask 2...")
     gen_specific("min", 2, 1, 0, 0)
     gen_specific("size2", 2, 2, 0, 0)
     gen_specific("size10", 2, 10, 0, 0)
+    gen_specific("size511", 2, 511, 0, 0)
     gen_specific("size512", 2, 512, 0, 0)
     gen_specific("size999", 2, 999, 0, 0)
     gen_specific("max", 2, 1000, 0, 0)
@@ -56,12 +74,14 @@ def sub2():
     for i in range(3):
         gen_random("random%d" % i, 2)
 
+    gen_adv_spikey("adversarial-line", 2, 1000, 0)
+
 def sub3():
     print("\nSubtask 3...")
     gen_specific("min", 3, 1, 0, 2)
     gen_specific("size2", 3, 2, 0, 2)
-    gen_specific("small", 3, 10, 2, 2)
-    gen_specific("medium", 3, 100, 2, 2)
+    gen_specific("size10", 3, 10, 2, 2)
+    gen_specific("size100", 3, 100, 2, 2)
     gen_specific("size512", 3, 512, 2, 2)
     gen_specific("size511-balanced", 3, 511, 6, 2)
     gen_specific("size512-balanced", 3, 512, 6, 2)
@@ -94,6 +114,14 @@ def sub4():
 
     for i in range(5):
         gen_random("random%d" % i, 4)
+
+    gen_adv_spikey("adversarial-line", 4, 1000, 0)
+    gen_adv_spikey("adversarial-spikey-1", 4, 1000, 1)
+    gen_adv_spikey("adversarial-spikey-50", 4, 1000, 50)
+    gen_adv_spikey("adversarial-spikey-500", 4, 1000, 500)
+
+    gen_adv_input("adversarial-spikeyv2", 4, 1000, 11, 2)
+    gen_adv_input("adversarial-balanced", 4, 1000, 6, 2)
 
 sub1()
 sub2()
