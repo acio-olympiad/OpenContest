@@ -27,6 +27,7 @@ public:
 int validate(int subtask) {
     registerValidation();
     int G = inf.readInt(0,2, "G");
+    inf.readSpace();
     int minN = 1, maxN = subtask == 1 ? 200 : 1000;
     int n = inf.readInt(minN, maxN, "n");
     inf.readSpace();
