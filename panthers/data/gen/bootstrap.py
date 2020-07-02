@@ -16,10 +16,10 @@ def print_system(command):
     os.system(command)
 
 def gen_specific(of, sb, N, tt, it):
-    print_system("python panther-gen.py %d %d %d %d > %s-sub%d.in" % (sb, N, tt, it, of, sb))
+    print_system("gen/python3 panther-gen.py %d %d %d %d > %s-sub%d.in" % (sb, N, tt, it, of, sb))
 
 def gen_random(of, sb):
-    print_system("python panther-gen.py %d > %s-sub%d.in" % (sb,of,sb))
+    print_system("gen/python3 panther-gen.py %d > %s-sub%d.in" % (sb,of,sb))
 
 def sub1():
     print("Subtask 1...")
