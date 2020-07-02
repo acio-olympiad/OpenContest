@@ -5,10 +5,10 @@ def print_system(command):
     os.system(command)
 
 def gen_specific(of, sb, N, M, tt):
-    print_system("python vibe-gen.py %d %d %d %d > %s" % (sb, N, M, tt, of))
+    print_system("python3 gen/vibe-gen.py %d %d %d %d > %s" % (sb, N, M, tt, of))
 
 def gen_random(of, sb):
-    print_system("python vibe-gen.py %d > %s" % (sb,of))
+    print_system("python3 gen/vibe-gen.py %d > %s" % (sb,of))
 
 def sub1():
     print("Subtask 1...")

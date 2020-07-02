@@ -1,11 +1,12 @@
 #include <bits/stdc++.h>
+#define int long long
 
 using namespace std;
 
 #define MXN 30001
 #define MXM 100001
 
-int n,m,ans,val[MXN],d[MXM],cache[30001][10001];
+int n,m,ans,val[MXN],d[MXM],cache[3001][1001];
 vector<int> edges[MXN];
 
 int dp(int u, int d){
@@ -18,7 +19,7 @@ int dp(int u, int d){
     return cache[u][d];
 }
 
-int main(){
+signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     cin>>n>>m;

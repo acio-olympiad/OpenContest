@@ -11,7 +11,7 @@ output: input
 	bash ./make-output.sh
 
 check: input
-	bash ./ran-validator.sh
+	bash ./run-validator.sh
 
 zip: input output check
 	zip data.zip *.in *.out

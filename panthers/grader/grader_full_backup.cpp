@@ -174,18 +174,9 @@ namespace adversarial_input_tree {
 			sz[x] += sz[c2[x]];
 		}
 	}
-	void reg(int x, int n) {
-		assert(taken[x] < sz[x]);
-		taken[x]++;
-		cur[n] = x;
-		if (fp[x] == -1) {
-			fp[x] = n;
-			stuck[n] = 1;
-		}
-	}
 	void main() {
 		scanf("%d %d", &N, &S);
-		for (int i = 0; i < N; i++) c1[i] = c2[i] = fp[i] = -1;
+		for (int i = 0; i < N; i++) c1[i] = c2[i] = -1;
 		for (int i = 0; i < N; i++) {
 			scanf("%d", par+i);
 			if (par[i] != -1) {
@@ -196,17 +187,19 @@ namespace adversarial_input_tree {
 			}
 		}
 		dfs(root);
-		for (int i = 0; i < N; i++) reg(0, i);
+		taken[0] = N;
 		for (int i = 0; i < N; i++) cur[i] = root;
-
 		vector<int> output = handlers(N, S);
-
 		if (!end_state) {
 			printf("WA: End state not achieved.\n");
 		} else {
 			vector<int> expected;
 			for (int i = 0; i < N; i++) {
-				assert(fp[i] != -1);
+				fp[i] = -1;
+			}
+			for (int i = 0; i < N; i++) {
+				assert(fp[cur[i]] == -1);
+				fp[cur[i]] = i;
 			}
 			for (int i = 0; i < N; i++) {
 				if (par[cur[i]] == -1) expected.push_back(-1);
@@ -237,6 +230,42 @@ namespace adversarial_input_tree {
 		assert(res != -1);
 		return res;
 	}
+	// Reassign attempts to split u and v up so they are not ancestors of each other
+	int reassign(int x, int &u, int &v) {
+		printf("reassign(%d)\n", x);
+		int l = sz[c1[x]] - taken[c1[x]];
+		int r = sz[c2[x]] - taken[c2[x]];
+		// Case 1: Perfect split
+		if (l > 0 && r > 0) {
+			u = c1[x];
+			v = c2[x];
+			taken[c1[x]]++;
+			taken[c2[x]]++;
+			return 1;
+		}
+		// Case 2: Defer split to subtrees
+		if (l > 1) {
+			taken[c1[x]] += 2;
+			return reassign(c1[x], u, v);
+		}
+		if (r > 1) {
+			taken[c2[x]] += 2;
+			return reassign(c2[x], u, v);
+		}
+		// Case 3: Make one parent of other
+		if (l > 0) {
+			taken[c1[x]]++;
+			u = c1[x];
+			return 1;
+		}
+		if (r > 0) {
+			taken[c2[x]]++;
+			u = c2[x];
+			return 1;
+		}
+		// Case 4: This should never happen under any cirumstance
+		return 0;
+	}
 	void check_end_state() {
 		for (int i = 0; i < N; i++) {
 			assert(taken[i] <= sz[i]);
@@ -253,17 +282,46 @@ namespace adversarial_input_tree {
 			printf("cur[%d]: %d\n", i, cur[i]);
 		}
 	}
-	// Either find a splitting subtree, or completely determine the position of one of the nodes
 	int query(int a, int b) {
 		printf("query(%d, %d)\n", a, b);
 		qcnt++;
-		// Code here
-		if (isanc(cur[b], cur[a])) swap(a, b);
-		// Only problematic case is (WLOG) A is ancestor of B
-		if (isanc(cur[a], cur[b])) {
-			// Do stuff
+		if (isanc(cur[b], cur[a])) {
+			swap(a, b);
 		}
-		// End code
+		if (isanc(cur[a], cur[b])) {
+			if (cur[a] == cur[b]) {
+				// We can only split
+				int thisshouldbetrue = reassign(cur[a], cur[a], cur[b]);
+				assert(thisshouldbetrue);
+			} else {
+				int res = cur[a];
+				while (isanc(res, cur[b]) && res != cur[b]) {
+					int opt1 = c1[res], opt2 = c2[res];
+					if (isanc(c1[res], cur[b])) {
+						swap(opt1, opt2);
+					}
+					// Try move to opt1
+					if (taken[opt1] < sz[opt1]) {
+						// Move successful
+						res = opt1;
+						taken[opt1]++;
+					} else if (taken[opt2] < sz[opt2]) {
+						res = opt2;
+						taken[opt2]++;
+					} else {
+						// rip i guess we're trapped, no use moving
+						printf("Trapped at res=%d\n", res);
+						break;
+					}
+				}
+				// If we can't keep b where it is, then we have to move over
+				if (res == cur[b]) {
+					int thisshouldbetrue = reassign(cur[b], res, cur[b]);
+					assert(thisshouldbetrue);
+				}
+				cur[a] = res;
+			}
+		}
 		int l = lca(cur[a], cur[b]);
 		printf("Returning %d\n", l);
 		dump_state();

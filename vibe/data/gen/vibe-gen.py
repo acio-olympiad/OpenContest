@@ -32,7 +32,7 @@ else:
 if subtask < 1 or subtask > SUBTASKS:
     raise Exception("Invalid subtask number.")
 
-defaults = (int(1e5), int(1e6), int(1e6), list(range(len(tg.TREE_TYPES))))
+defaults = (int(1e5), int(1e5), int(1e6), list(range(len(tg.TREE_TYPES))))
 
 # if constraints are not specified, will generate them randomly
 
