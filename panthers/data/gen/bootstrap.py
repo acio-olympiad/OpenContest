@@ -16,16 +16,16 @@ def print_system(command):
     os.system(command)
 
 def gen_specific(of, sb, N, tt, it):
-    print_system("gen/python3 panther-gen.py 0 %d %d %d %d > %s-sub%d.in" % (sb, N, tt, it, of, sb))
+    print_system("python3 gen/panther-gen.py 0 %d %d %d %d > %s-sub%d.in" % (sb, N, tt, it, of, sb))
 
 def gen_random(of, sb):
-    print_system("gen/python3 panther-gen.py 0 %d > %s-sub%d.in" % (sb,of,sb))
+    print_system("python3 gen/panther-gen.py 0 %d > %s-sub%d.in" % (sb,of,sb))
 
 def gen_adv_spikey(of, sb, N, spikes):
-    print_system("gen/python3 panther-gen.py 1 %d %d %d > %s-sub%d.in" % (sb, N, spikes, of, sb))
+    print_system("python3 gen/panther-gen.py 1 %d %d %d > %s-sub%d.in" % (sb, N, spikes, of, sb))
 
 def gen_adv_input(of, sb, N, tt, it):
-    print_system("gen/python3 panther-gen.py 2 %d %d %d %d > %s-sub%d.in" % (sb, N, tt, it, of, sb))
+    print_system("python3 gen/panther-gen.py 2 %d %d %d %d > %s-sub%d.in" % (sb, N, tt, it, of, sb))
 
 
 def sub1():
