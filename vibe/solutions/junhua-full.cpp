@@ -49,7 +49,6 @@ void dfs(int u) {
 }
 
 int main() {
-    freopen("vibein.txt","r",stdin);
     scanf("%d %d",&N,&M);
     for (int i=1; i<=N; i++) {
         scanf("%d", &V[i]);
