@@ -38,8 +38,8 @@ namespace input_tree{
         res = handlers(N,S);
 
         printf("Queries: %d\n", Q);
-        for(int i = 0; i < N; ++i)printf("%d ",res[i]);
-        puts("");
+        //for(int i = 0; i < N; ++i)printf("%d ",res[i]);
+        //puts("");
         if(ans == res)
             puts("AC");
         else
@@ -99,8 +99,8 @@ namespace adversarial_spikey{
             ans[gtc[i]] = gtc[i+1];
 
         printf("Queries: %d\n", Q);
-        for(int i = 0; i < N; ++i)printf("%d ",res[i]);
-        puts("");
+        //for(int i = 0; i < N; ++i)printf("%d ",res[i]);
+        //puts("");
         //for(int i = 0; i < N; ++i)printf("%d ",ans[i]);
         //puts("");
         if(ans != res)wa = 1;
@@ -162,6 +162,7 @@ namespace adversarial_input_tree {
 	int par[1005], ind[1005], sz[1005], c1[1005], c2[1005], fp[1005];
 	int taken[1005], cur[1005], stuck[1005];
 	int root, cnt;
+	vector<int> qa, qb, qr;
 	void dfs(int x) {
 		ind[x] = cnt++;
 		sz[x] = 1;
@@ -183,46 +184,6 @@ namespace adversarial_input_tree {
 			stuck[n] = 1;
 		}
 	}
-	void main() {
-		scanf("%d %d", &N, &S);
-		for (int i = 0; i < N; i++) c1[i] = c2[i] = fp[i] = -1;
-		for (int i = 0; i < N; i++) {
-			scanf("%d", par+i);
-			if (par[i] != -1) {
-				if (c1[par[i]] == -1) c1[par[i]] = i;
-				else c2[par[i]] = i;
-			} else {
-				root = i;
-			}
-		}
-		dfs(root);
-		for (int i = 0; i < N; i++) reg(0, i);
-		for (int i = 0; i < N; i++) cur[i] = root;
-
-		vector<int> output = handlers(N, S);
-
-		if (!end_state) {
-			printf("WA: End state not achieved.\n");
-		} else {
-			vector<int> expected;
-			for (int i = 0; i < N; i++) {
-				assert(fp[i] != -1);
-			}
-			for (int i = 0; i < N; i++) {
-				if (par[cur[i]] == -1) expected.push_back(-1);
-				else expected.push_back(fp[par[cur[i]]]);
-			}
-			if (expected != output) {
-				printf("WA: Incorrect output\n");
-			} else {
-				printf("AC\n");
-			}
-		}
-		printf("%d queries\n", qcnt);
-		printf("Result:");
-		for (int x : output) printf(" %d", x);
-		printf("\n");
-	}
 	int isanc(int a, int b) {
 		return ind[a] <= ind[b] && ind[a] + sz[a] > ind[b];
 	}
@@ -237,38 +198,137 @@ namespace adversarial_input_tree {
 		assert(res != -1);
 		return res;
 	}
+	void main() {
+		srand(34958349);
+		scanf("%d %d", &N, &S);
+		for (int i = 0; i < N; i++) c1[i] = c2[i] = fp[i] = -1;
+		for (int i = 0; i < N; i++) {
+			scanf("%d", par+i);
+			if (par[i] != -1) {
+				if (c1[par[i]] == -1) c1[par[i]] = i;
+				else c2[par[i]] = i;
+			} else {
+				root = i;
+			}
+		}
+		for (int i = 0; i < N; i++) {
+			if (c2[i] != -1 && (rand()&1)) {
+				swap(c1[i], c2[i]);
+			}
+		}
+		dfs(root);
+		for (int i = 0; i < N; i++) reg(0, i);
+		for (int i = 0; i < N; i++) cur[i] = root;
+
+		vector<int> output = handlers(N, S);
+		if (output.size() != N) printf("WA: Output size wrong\n");
+		if (!end_state) {
+			printf("WA: End state not achieved.\n");
+		} else {
+			int fine = 1;
+			for (int i = 0; i < N; i++) {
+				if (par[cur[i]] == -1) {
+					fine &= (output[i] == -1);
+				} else {
+					if (stuck[i]) {
+						fine &= (fp[par[cur[i]]] == output[i]);
+					} else {
+						fine &= isanc(cur[i], cur[output[i]]);
+					}
+				}
+			}
+			if (!fine) {
+				printf("WA: Incorrect output\n");
+			} else {
+				printf("AC\n");
+			}
+		}
+		printf("%d queries\n", qcnt);
+		//printf("Result:");
+		//for (int x : output) printf(" %d", x);
+		//printf("\n");
+		for (int i = 0; i < qa.size(); i++) {
+			int l2 = lca(cur[qa[i]], cur[qb[i]]);
+			if (fp[l2] != qr[i]) {
+				printf("Query %d inconsistent! lca(%d, %d) = %d, expected %d\n", i+1, qa[i], qb[i], qr[i], fp[l2]);
+			} else {
+				//printf("Query %d consistent. lca(%d, %d) = %d, expected %d\n", i+1, qa[i], qb[i], qr[i], fp[l2]);
+			}
+		}
+	}
 	void check_end_state() {
 		for (int i = 0; i < N; i++) {
-			assert(taken[i] <= sz[i]);
-			if (taken[i] < sz[i]) return;
+			if (taken[i] + 1 < sz[i]) return;
 		}
 		end_state = 1;
-		printf("End state achieved!\n"); // TODO: REMOVE
 	}
 	void dump_state() {
 		for (int i = 0; i < N; i++) {
 			printf("Node %d: (%d/%d)\n", i, taken[i], sz[i]);
 		}
 		for (int i = 0; i < N; i++) {
-			printf("cur[%d]: %d\n", i, cur[i]);
+			printf("cur[%d] (stuck %d): %d\n", i, stuck[i], cur[i]);
 		}
 	}
 	// Either find a splitting subtree, or completely determine the position of one of the nodes
 	int query(int a, int b) {
-		printf("query(%d, %d)\n", a, b);
+		if (a == b) return a; // smh contestant, sanitise your query inputs
+		//printf("query(%d, %d)\n", a, b);
 		qcnt++;
 		// Code here
 		if (isanc(cur[b], cur[a])) swap(a, b);
 		// Only problematic case is (WLOG) A is ancestor of B
 		if (isanc(cur[a], cur[b])) {
 			// Do stuff
+			// Case 1: Move a somewhere above b
+			while (isanc(cur[a], cur[b]) && cur[a] != cur[b] && !stuck[a]) {
+				int opt1 = c1[cur[a]], opt2 = c2[cur[a]];
+				assert(opt1 != -1);
+				if (isanc(c1[cur[a]], cur[b]) && opt2 != -1) {
+					swap(opt1, opt2);
+				}
+				if (taken[opt1] < sz[opt1]) {
+					// Move to non-ancestor child
+					reg(opt1, a);
+				} else if (opt2 != -1 && taken[opt2] < sz[opt2]) {
+					// Move to ancestor child
+					reg(opt2, a);
+				} else {
+					// Wait this case should never happen right?
+					assert(false);
+				}
+			}
+			// Case 2: A and B are the same now I guess, so we gotta either make one of them stuck or split em up
+			while (!stuck[a] && !stuck[b] && cur[a] == cur[b]) {
+				int d1 = 0, d2 = 0;
+				assert(c1[cur[a]] != -1);
+				if (c1[cur[a]] != -1) d1 = sz[c1[cur[a]]] - taken[c1[cur[a]]];
+				if (c2[cur[a]] != -1) d2 = sz[c2[cur[a]]] - taken[c2[cur[a]]];
+				if (d1 > 0 && d2 > 0) {
+					reg(c1[cur[a]], a);
+					reg(c2[cur[b]], b);
+				} else if (d1 >= 2) {
+					reg(c1[cur[a]], a);
+					reg(c1[cur[b]], b);
+				} else if (d2 >= 2) {
+					reg(c2[cur[a]], a);
+					reg(c2[cur[b]], b);
+				} else {
+					// This should literally never happen :/
+					assert(false);
+				}
+			}
+			// If either one is stuck, then we reveal no additional information from LCAing
 		}
 		// End code
 		int l = lca(cur[a], cur[b]);
-		printf("Returning %d\n", l);
-		dump_state();
+		//printf("Returning %d\n", fp[l]);
+		//dump_state();
 		check_end_state();
-		return l;
+		qa.push_back(a);
+		qb.push_back(b);
+		qr.push_back(fp[l]);
+		return fp[l];
 	}
 }
 

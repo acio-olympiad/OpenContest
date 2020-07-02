@@ -27,6 +27,14 @@ def gen_adv_spikey(of, sb, N, spikes):
 def gen_adv_input(of, sb, N, tt, it):
     print_system("python3 gen/panther-gen.py 2 %d %d %d %d > %s-sub%d.in" % (sb, N, tt, it, of, sb))
 
+def gen_adv_super_spikey(of, sb, N):
+    assert(sb == 4)
+    print_system("python3 gen/super-spikey.py %d > %s-sub%d.in" % (N, of, sb))
+
+def gen_adv_kinda_spikey(of, sb, N, mid):
+    assert(sb == 4)
+    print_system("python3 gen/kinda-spikey.py %d %d > %s-sub%d.in" % (N, mid, of, sb))
+
 
 def sub1():
     print("Subtask 1...")
@@ -120,6 +128,11 @@ def sub4():
 
     gen_adv_input("adversarial-spikeyv2", 4, 1000, 11, 2)
     gen_adv_input("adversarial-balanced", 4, 1000, 6, 2)
+
+    gen_adv_super_spikey("adversarial-superspikey", 4, 1000)
+    for i in range(100, 900, 100):
+        for j in range(-5, 6, 5):
+            gen_adv_kinda_spikey("adversarial-kindaspikey-%d" % (i+j), 4, 1000, (i+j))
 
 sub1()
 sub2()

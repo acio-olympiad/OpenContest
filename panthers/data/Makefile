@@ -5,10 +5,12 @@ all: input output check zip
 input:
 	# Put any data generation commands here
 	python3 gen/bootstrap.py
-	cp handmade/* .
+	# No sample cases
+	# cp handmade/* .
 
 output: input
-	bash ./make-output.sh
+	# Ummmm ok what do we do here?
+	bash ./make-blank-outputs.sh
 
 check: input
 
