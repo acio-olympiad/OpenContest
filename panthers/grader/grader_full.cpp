@@ -217,7 +217,8 @@ namespace adversarial_input_tree {
 			}
 		}
 		dfs(root);
-		for (int i = 0; i < N; i++) reg(0, i);
+		assert(sz[root] == N);
+		for (int i = 0; i < N; i++) reg(root, i);
 		for (int i = 0; i < N; i++) cur[i] = root;
 
 		vector<int> output = handlers(N, S);
