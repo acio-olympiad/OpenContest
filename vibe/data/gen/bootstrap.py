@@ -40,8 +40,12 @@ def sub3():
     gen_specific("small-sub3.in", 3, 10, 1, 0)
     gen_specific("max-sub3.in", 3, 100000, 1, 0)
 
-    for i in range(3):
+    for i in range(5):
         gen_random("random-sub3-%d.in" % i, 3)
+
+    for i in range(5):
+        gen_specific("max-random-sub3-%d.in" % i, 3, 100000, 1, 0)
+
 
 def sub4():
     print("Subtask 4...")
@@ -51,7 +55,7 @@ def sub4():
     for tt in range(13):
         gen_specific("type%d-sub4.in" % tt, 4, 100000, 1, tt)
 
-    for i in range(5):
+    for i in range(10):
         gen_random("random-sub4-%d.in" % i, 4)
 
 def sub5():
@@ -61,7 +65,7 @@ def sub5():
     gen_specific("small-sub5.in", 5, 1000, 1000, 0)
     gen_specific("max-sub5.in", 5, 100000, 100000, 0)
 
-    for i in range(3):
+    for i in range(5):
         gen_random("random-sub5-%d.in" % i, 5)
 
 def sub6():
