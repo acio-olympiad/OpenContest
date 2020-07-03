@@ -45,6 +45,7 @@ int validate(int subtask) {
     int rt = -1;
     for (int i = 0; i < n; i++) {
         P[i] = inf.readInt(-1,n-1, "P");
+        if (i != n-1) {inf.readSpace();}
         if (P[i] == -1) {
             if (rt != -1) {error("too many roots");}
             rt = i;
@@ -56,7 +57,6 @@ int validate(int subtask) {
         } else {
             UF.Union(i, P[i]);
         }
-        if (i != n-1) {inf.readSpace();}
         //  printf("Read %d\n",i);
     }
     inf.readEoln();
