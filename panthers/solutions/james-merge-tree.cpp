@@ -65,7 +65,7 @@ int merge_tree(int a, int b, int qu = -1){
     }    
 }
 
-vector<int> handlers(int N, int S){
+vector<int> supervisors(int N, int S){
     P.assign(N,-1);
     vector<int> rts;
     for(int i = 0; i < N; ++i)

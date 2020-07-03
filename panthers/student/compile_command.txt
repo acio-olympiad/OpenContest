@@ -1,0 +1,1 @@
+g++ -std=c++11 -O2 -Wall -static panther.h sol.cpp grader.cpp -o panther

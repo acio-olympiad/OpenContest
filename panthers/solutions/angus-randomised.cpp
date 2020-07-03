@@ -53,7 +53,7 @@ void solve(vector<int> v, mt19937 &rng, int root = -1) {
         par[chain[i]] = chain[i-1];
     }
 }
-vector<int> handlers(int n, int s){
+vector<int> supervisors(int n, int s){
     mt19937 rng;
     // try to confuse adaptive graders
     for (int i = 0; i < 10; i++) query(rnd(0, n-1), rnd(0, n-1));

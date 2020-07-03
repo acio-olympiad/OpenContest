@@ -1,7 +1,82 @@
-#include "panther.h"
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <bitset>
+#include <algorithm>
+#include <cassert>
+#include <csignal>
+#include <numeric>
+
 using namespace std;
 #define MAXN 1005
+#define MAX_Q 20000
+
+FILE *fifo_in, *fifo_out;
+int qcnt;
+
+int query(int a, int b);
+
+// v = a returns 0
+double invlerp(double a, double b, double v) {
+	return (v - a) / (b - a);
+}
+
+void ac(int S) {
+	fprintf(stderr, "Accepted with %d queries\n", qcnt);
+	if (S != 4) printf("1.0\n");
+	else {
+		if (qcnt > 20000) printf("0.0\n");
+		else if (qcnt > 16000) printf("0.2\n");
+		else if (qcnt <= 10000) printf("1.0\n");
+		else {
+			double score = 0.4 + 0.6 * invlerp(16000, 10000, qcnt);
+			printf("%lf\n", score);
+		}
+	}
+	exit(0);
+}
+
+void ripwa() {
+	fprintf(stderr, "Wrong Answer\n");
+	printf("0.0");
+	exit(0);
+}
+vector<int> _result;
+vector<int> supervisors(int N, int S) {
+	fprintf(fifo_in, "%d %d\n", N, S);
+	fflush(fifo_in);
+	while (1) {
+		int op = 0;
+		fscanf(fifo_out, "%d", &op);
+		if (op == 0) {
+			// Normal query
+			int a = -1, b = -1;
+			fscanf(fifo_out, "%d %d", &a, &b);
+			if (min(a, b) < 0 || max(a, b) >= N) {
+				ripwa();
+			}
+			int res = query(a, b);
+			fprintf(fifo_in, "%d\n", res);
+			fflush(fifo_in);
+		} else if (op == 1) {
+			// Outputting result
+			for (int i = 0; i < N; i++) {
+				int elem;
+				fscanf(fifo_out, "%d", &elem);
+				_result.push_back(elem);
+			}
+			break;
+		} else {
+			// Stub telling me that the contestant messed up
+			ripwa();
+		}
+	}
+	return _result;
+}
+
+
+
+// ------------------ GRADERS ------------------
 
 namespace input_tree{
     typedef pair<int,int> pii;
@@ -37,13 +112,10 @@ namespace input_tree{
 
         res = supervisors(N,S);
 
-        printf("Queries: %d\n", Q);
-        //for(int i = 0; i < N; ++i)printf("%d ",res[i]);
-        //puts("");
         if(ans == res)
-            puts("AC");
+            ac(S);
         else
-            puts("WA");
+            ripwa();
         return 0;      
     }
 
@@ -51,14 +123,12 @@ namespace input_tree{
 
     int query(int a, int b){
         Q++;
-        //printf("%d %d %d",Q,a,b);
         pii res = {N,N};
         if(po[a]>po[b])swap(a,b);
         for(a=po[a],b=po[b]+1; a<b; a>>=1,b>>=1){
             if(a&1)res=min(res,st[a++]);
             if(b&1)res=min(res,st[--b]);
         }
-        //printf(" %d\n",res.second);
         return res.second;
     }
 }
@@ -94,24 +164,16 @@ namespace adversarial_spikey{
             if(~gtc[lt[i].count()])wa = 1;
             gtc[lt[i].count()] = i;
         }
-		if (wa) {
-			puts("WA");
-			return 0;
-		}
+		if (wa) ripwa();
 
         for(int i = N-spikes; i-->0;)
             ans[gtc[i]] = gtc[i+1];
 
-        printf("Queries: %d\n", Q);
-        //for(int i = 0; i < N; ++i)printf("%d ",res[i]);
-        //puts("");
-        //for(int i = 0; i < N; ++i)printf("%d ",ans[i]);
-        //puts("");
         if(ans != res)wa = 1;
         if(wa)
-            puts("WA");
+            ripwa();
         else
-            puts("AC"); 
+            ac(S);
         return 0;      
     }
 
@@ -150,7 +212,6 @@ namespace adversarial_spikey{
         for(int i = 0; i < N; ++i)if(nlt[i])
             gt[i] |= ngt;
 
-        //printf("%d %d %d\n",a,b,res);
         return res;
     }
 
@@ -208,14 +269,6 @@ namespace adversarial_input_tree {
 		}
 		end_state = 1;
 	}
-	void dump_state() {
-		for (int i = 0; i < N; i++) {
-			printf("Node %d: (%d/%d)\n", i, taken[i], sz[i]);
-		}
-		for (int i = 0; i < N; i++) {
-			printf("cur[%d] (stuck %d): %d\n", i, stuck[i], cur[i]);
-		}
-	}
 	void main() {
 		srand(34958349);
 		scanf("%d %d", &N, &S);
@@ -240,11 +293,10 @@ namespace adversarial_input_tree {
 		for (int i = 0; i < N; i++) cur[i] = root;
 
 		vector<int> output = supervisors(N, S);
-		if (output.size() != N) printf("WA: Output size wrong\n");
+		if (output.size() != N) ripwa();
 		check_end_state();
-		//dump_state();
 		if (!end_state) {
-			printf("WA: End state not achieved.\n");
+			ripwa();
 		} else {
 			int fine = 1;
 			for (int i = 0; i < N; i++) {
@@ -259,28 +311,15 @@ namespace adversarial_input_tree {
 				}
 			}
 			if (!fine) {
-				printf("WA: Incorrect output\n");
+				ripwa();
 			} else {
-				printf("AC\n");
-			}
-		}
-		printf("%d queries\n", qcnt);
-		//printf("Result:");
-		//for (int x : output) printf(" %d", x);
-		//printf("\n");
-		for (int i = 0; i < qa.size(); i++) {
-			int l2 = lca(cur[qa[i]], cur[qb[i]]);
-			if (fp[l2] != qr[i]) {
-				printf("Query %d inconsistent! lca(%d, %d) = %d, expected %d\n", i+1, qa[i], qb[i], qr[i], fp[l2]);
-			} else {
-				//printf("Query %d consistent. lca(%d, %d) = %d, expected %d\n", i+1, qa[i], qb[i], qr[i], fp[l2]);
+				ac(S);
 			}
 		}
 	}
 	// Either find a splitting subtree, or completely determine the position of one of the nodes
 	int query(int a, int b) {
 		if (a == b) return a; // smh contestant, sanitise your query inputs
-		//printf("query(%d, %d)\n", a, b);
 		qcnt++;
 		// Code here
 		if (isanc(cur[b], cur[a])) swap(a, b);
@@ -329,8 +368,6 @@ namespace adversarial_input_tree {
 		}
 		// End code
 		int l = lca(cur[a], cur[b]);
-		//printf("Returning %d\n", fp[l]);
-		//dump_state();
 		check_end_state();
 		qa.push_back(a);
 		qb.push_back(b);
@@ -350,7 +387,12 @@ enum GRADER{
 
 static GRADER g;
 
-int main(){
+int main(int argc, char **argv){
+	signal(SIGPIPE, SIG_IGN);
+	freopen("input.txt", "r", stdin);
+	fifo_in = fopen(argv[1], "w"); // Writing to stub input
+	fifo_out = fopen(argv[2], "r"); // Reading from stub output
+
     scanf("%d",&g);
 
     switch (g){
@@ -363,10 +405,14 @@ int main(){
 		case ADVERSARIAL_INPUT_TREE:
 			adversarial_input_tree::main();
 			break;
-    }      
+    }
 }
 
 int query(int a, int b){
+	if (qcnt >= MAX_Q) {
+		ripwa();
+	}
+	qcnt++;
     switch (g){
         case INPUT_TREE:
             return input_tree::query(a,b);

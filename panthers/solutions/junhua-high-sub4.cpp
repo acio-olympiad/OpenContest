@@ -57,7 +57,7 @@ int FindPar(int v, int subtree) {
     }
 }
 
-vector<int> handlers(int n, int s){
+vector<int> supervisors(int n, int s){
     N= n;
     getRoot();
     P[rt] = -1, inTree[rt] = 1;
@@ -88,7 +88,7 @@ vector<int> handlers(int n, int s){
 }
 
 /*
-vector<int> handlers(int N, int S){
+vector<int> supervisors(int N, int S){
     vector<int> res(N);
 
     // Implement your solution here

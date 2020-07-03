@@ -142,7 +142,7 @@ void insert_subtree(int rt, int u, bool inc = 0){
     }
 }
 
-vector<int> handlers(int N, int S){
+vector<int> supervisors(int N, int S){
     P.resize(N);
     // Implement your solution here
     

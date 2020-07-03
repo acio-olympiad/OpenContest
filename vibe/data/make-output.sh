@@ -2,6 +2,9 @@
 
 echo "Compiling judge solutions..."
 
+# Prevent stack overflow
+ulimit -s 131072
+
 declare -a soln
 for i in ../solutions/*-full.cpp; do
     exe=`basename $i`
