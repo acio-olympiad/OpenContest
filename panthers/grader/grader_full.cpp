@@ -198,6 +198,20 @@ namespace adversarial_input_tree {
 		assert(res != -1);
 		return res;
 	}
+	void check_end_state() {
+		for (int i = 0; i < N; i++) {
+			if (taken[i] + 1 < sz[i]) return;
+		}
+		end_state = 1;
+	}
+	void dump_state() {
+		for (int i = 0; i < N; i++) {
+			printf("Node %d: (%d/%d)\n", i, taken[i], sz[i]);
+		}
+		for (int i = 0; i < N; i++) {
+			printf("cur[%d] (stuck %d): %d\n", i, stuck[i], cur[i]);
+		}
+	}
 	void main() {
 		srand(34958349);
 		scanf("%d %d", &N, &S);
@@ -223,19 +237,21 @@ namespace adversarial_input_tree {
 
 		vector<int> output = handlers(N, S);
 		if (output.size() != N) printf("WA: Output size wrong\n");
+		check_end_state();
+		//dump_state();
 		if (!end_state) {
 			printf("WA: End state not achieved.\n");
 		} else {
 			int fine = 1;
 			for (int i = 0; i < N; i++) {
-				if (par[cur[i]] == -1) {
-					fine &= (output[i] == -1);
-				} else {
-					if (stuck[i]) {
-						fine &= (fp[par[cur[i]]] == output[i]);
+				if (stuck[i]) {
+					if (par[cur[i]] == -1) {
+						fine &= (output[i] == -1);
 					} else {
-						fine &= isanc(cur[i], cur[output[i]]);
+						fine &= (fp[par[cur[i]]] == output[i]);
 					}
+				} else {
+					fine &= isanc(cur[i], cur[output[i]]);
 				}
 			}
 			if (!fine) {
@@ -253,22 +269,8 @@ namespace adversarial_input_tree {
 			if (fp[l2] != qr[i]) {
 				printf("Query %d inconsistent! lca(%d, %d) = %d, expected %d\n", i+1, qa[i], qb[i], qr[i], fp[l2]);
 			} else {
-				//printf("Query %d consistent. lca(%d, %d) = %d, expected %d\n", i+1, qa[i], qb[i], qr[i], fp[l2]);
+				printf("Query %d consistent. lca(%d, %d) = %d, expected %d\n", i+1, qa[i], qb[i], qr[i], fp[l2]);
 			}
-		}
-	}
-	void check_end_state() {
-		for (int i = 0; i < N; i++) {
-			if (taken[i] + 1 < sz[i]) return;
-		}
-		end_state = 1;
-	}
-	void dump_state() {
-		for (int i = 0; i < N; i++) {
-			printf("Node %d: (%d/%d)\n", i, taken[i], sz[i]);
-		}
-		for (int i = 0; i < N; i++) {
-			printf("cur[%d] (stuck %d): %d\n", i, stuck[i], cur[i]);
 		}
 	}
 	// Either find a splitting subtree, or completely determine the position of one of the nodes
