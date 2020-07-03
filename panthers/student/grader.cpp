@@ -1,6 +1,8 @@
 #include "panther.h"
 #include <cstdio>
-
+#include <utility>
+#include <vector>
+#include <iostream>
 #define MAXN 1005
 
 using namespace std;
@@ -35,7 +37,7 @@ int main(){
     dfs(rt, 0);
     for(int i = mcnt; i-->1;)st[i]=min(st[i*2+1],st[i*2]);
 
-    res = handlers(N,S);
+    res = supervisors(N,S);
 
     printf("Queries Used: %d\n", Q);
     for(int i = 0; i < N; ++i)printf("%d ",res[i]);
