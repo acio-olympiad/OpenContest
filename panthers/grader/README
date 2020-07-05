@@ -1,0 +1,3 @@
+grader_full is a grader that compiles with the contestant's code. Since the output files are blank, some tweaking may be required for it to output a score.
+
+manager.cpp and stub.cpp are the manager and communication stub for the CMS Communication format. Remember to compile manager.cpp on the contest server before uploading to CMS.

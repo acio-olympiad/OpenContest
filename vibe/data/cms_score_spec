@@ -1,0 +1,1 @@
+[[9, ".*(handmade-1|sample|sub1)", "Subtask 1"], [14, ".*(handmade-1|sample|sub1|sub2)", "Subtask 2"], [27, ".*(handmade-1|handmade-2|sub3)", "Subtask 3"], [9, ".*(handmade-1|handmade-2|sub3|sub4|minM)", "Subtask 4"], [21, ".*(handmade-1|handmade-2|sub3|sub5)", "Subtask 5"], [20, ".*(handmade-1|handmade-2|sample|sub1|sub2|sub3|sub4|sub5|sub6)", "Subtask 6"]]
