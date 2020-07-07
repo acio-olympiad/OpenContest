@@ -45,6 +45,7 @@ int query(int a, int b) {
 		fflush(fifo_out);
 		int res = -1;
 		fscanf(fifo_in, "%d", &res);
+		if (res == -1) contestant_messed_up();
 		return res;
 	}
 }

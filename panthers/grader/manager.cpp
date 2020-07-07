@@ -211,7 +211,6 @@ namespace adversarial_spikey{
 
         for(int i = 0; i < N; ++i)if(nlt[i])
             gt[i] |= ngt;
-
         return res;
     }
 
