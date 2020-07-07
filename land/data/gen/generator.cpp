@@ -204,8 +204,8 @@ int main() {
     vector <pair<int,int> > testcases;
     for (int i=0; i<T; i++) {
         int ti,si;
-        mingentype = min(mingentype, ti);
         cin >> ti >> si;
+        mingentype = min(mingentype, ti);
         assert(1 <= ti && ti <= 6);
         Sum += si;
         testcases.push_back({ti, si});
